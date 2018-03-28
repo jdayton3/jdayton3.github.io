@@ -22,7 +22,7 @@ c <- a + b
 c
 ```
 
-And a few lines of Python, just to test whether the syntax highlighting looks good.
+And a few lines of Python, just to test whether the syntax highlighting looks good. 
 
 ```{python}
 def say_hi(name):
