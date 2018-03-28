@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
-    <link>https://example.com/</link>
+    <link>/</link>
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 28 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About Me</title>
-      <link>https://example.com/about/</link>
+      <link>/about/</link>
       <pubDate>Wed, 28 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/about/</guid>
+      <guid>/about/</guid>
       <description>Hi! I&amp;rsquo;m Jonathan.
 I&amp;rsquo;m a biology MS student at Brigham Young University interested in deep learning, and I graduate April 2019. I&amp;rsquo;m doing cancer research and IT work.
 Check out my GitHub for projects I&amp;rsquo;ve worked on, take a look at my LinkedIn for my resume, and shoot me an email if you have any questions.</description>
@@ -24,10 +24,10 @@ Check out my GitHub for projects I&amp;rsquo;ve worked on, take a look at my Lin
     
     <item>
       <title>Testing R Markdown</title>
-      <link>https://example.com/posts/testing-r-markdown/</link>
+      <link>/posts/testing-r-markdown/</link>
       <pubDate>Wed, 28 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/posts/testing-r-markdown/</guid>
+      <guid>/posts/testing-r-markdown/</guid>
       <description>Some lines of R code. For some reason the a is showing up with some really weird styling.
 a &amp;lt;- 1 b &amp;lt;- 2 c &amp;lt;- a + b c ## [1] 3 And a few lines of Python, just to test whether the syntax highlighting looks good.
 def say_hi(name): print(&amp;quot;Hello,&amp;quot;, name) return 1 + 2 say_hi(&amp;quot;World&amp;quot;) ## Hello, World </description>
