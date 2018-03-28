@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>R Markdown on </title>
-    <link>/tags/r-markdown/</link>
+    <link>https://example.com/tags/r-markdown/</link>
     <description>Recent content in R Markdown on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 28 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.com/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Testing R Markdown</title>
-      <link>/posts/testing-r-markdown/</link>
+      <link>https://example.com/posts/testing-r-markdown/</link>
       <pubDate>Wed, 28 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/posts/testing-r-markdown/</guid>
+      <guid>https://example.com/posts/testing-r-markdown/</guid>
       <description>Some lines of R code. For some reason the a is showing up with some really weird styling.
 a &amp;lt;- 1 b &amp;lt;- 2 c &amp;lt;- a + b c ## [1] 3 And a few lines of Python, just to test whether the syntax highlighting looks good.
 def say_hi(name): print(&amp;quot;Hello,&amp;quot;, name) return 1 + 2 say_hi(&amp;quot;World&amp;quot;) ## Hello, World </description>
