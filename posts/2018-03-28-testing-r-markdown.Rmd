@@ -1,0 +1,33 @@
+---
+title: Testing R Markdown
+author: Jonathan Dayton
+date: '2018-03-28'
+slug: testing-r-markdown
+categories: []
+tags:
+  - R Markdown
+---
+
+```{r setup, echo=F}
+library(knitr)
+opts_chunk$set(engine.path = 'python3')
+```
+
+Some lines of R code.  For some reason the `a` is showing up with some really weird styling.
+
+```{r}
+a <- 1
+b <- 2
+c <- a + b
+c
+```
+
+And a few lines of Python, just to test whether the syntax highlighting looks good.
+
+```{python}
+def say_hi(name):
+    print("Hello,", name)
+    return 1 + 2
+    
+say_hi("World")
+```
