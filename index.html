@@ -103,9 +103,14 @@
         <div class="post">
         <h1 class="post-title"><a href="http://jdaytn.com/posts/testing-r-markdown/">Testing R Markdown</a></h1>
         <span class="post-date">Wed, Mar 28, 2018</span>
-        Some lines of R code. For some reason the a is showing up with some really weird styling.
-a &lt;- 1 b &lt;- 2 c &lt;- a + b c ## [1] 3 And a few lines of Python, just to test whether the syntax highlighting looks good.
-def say_hi(name): print(&quot;Hello,&quot;, name) return 1 + 2 say_hi(&quot;World&quot;) ## Hello, World 
+        Here are a few lines of R code. For some reason the a is showing up with some really weird styling.
+a &lt;- 1 b &lt;- 2 c &lt;- a + b c ## [1] 3 And here are a few lines of Python, just to test whether the syntax highlighting looks good.
+def say_hi(name): print(&quot;Hello,&quot;, name) return 1 + 2 say_hi(&quot;World&quot;) ## Hello, World Let’s test a knitr::kable:
+knitr::kable( head(iris, 10), caption = &quot;Cool caption&quot; )  Table 1: Cool caption  Sepal.
+        
+        <div class="read-more-link">
+            <a href="/posts/testing-r-markdown/">Read More…</a>
+        </div>
         
         </div>
   </div>

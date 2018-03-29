@@ -8,12 +8,14 @@ tags:
   - R Markdown
 ---
 
-```{r setup, echo=F}
+```{r setup, echo=F, warning=F, message=F}
+knitr::opts_chunk$set(engine.path = 'python3', warning = FALSE, message = FALSE)
 library(knitr)
-opts_chunk$set(engine.path = 'python3')
+library(ggplot2)
+library(dplyr)
 ```
 
-Some lines of R code.  For some reason the `a` is showing up with some really weird styling.
+Here are a few lines of R code.  For some reason the `a` is showing up with some really weird styling.
 
 ```{r}
 a <- 1
@@ -22,7 +24,7 @@ c <- a + b
 c
 ```
 
-And a few lines of Python, just to test whether the syntax highlighting looks good. 
+And here are a few lines of Python, just to test whether the syntax highlighting looks good. 
 
 ```{python}
 def say_hi(name):
@@ -31,3 +33,21 @@ def say_hi(name):
     
 say_hi("World")
 ```
+
+Let's test a `knitr::kable`:
+
+```{r}
+knitr::kable(
+  head(iris, 10), caption = "Cool caption"
+)
+```
+
+And some sort of plot:
+
+```{r}
+iris <- tbl_df(iris)
+iris %>% ggplot(aes(x = Sepal.Width, y = Sepal.Length)) +
+  geom_point(aes(color = Species))
+```
+
+Looks good up to this point!
