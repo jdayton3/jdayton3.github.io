@@ -13,13 +13,13 @@
   </url>
   
   <url>
-    <loc>http://jdaytn.com/</loc>
-    <lastmod>2018-03-28T00:00:00+00:00</lastmod>
+    <loc>http://jdaytn.com/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://jdaytn.com/categories/</loc>
+    <loc>http://jdaytn.com/</loc>
+    <lastmod>2018-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
