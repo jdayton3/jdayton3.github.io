@@ -38,7 +38,7 @@ Let's test a `knitr::kable`:
 
 ```{r}
 knitr::kable(
-  head(iris, 10), caption = "Cool caption"
+  head(iris, 10), "html", caption = "Cool caption"
 )
 ```
 
