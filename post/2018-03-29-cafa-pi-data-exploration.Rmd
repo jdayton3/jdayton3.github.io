@@ -1,0 +1,16 @@
+---
+title: CAFA PI Data Exploration
+author: Jonathan Dayton
+date: '2018-03-29'
+slug: cafa-pi-data-exploration
+categories:
+  - Research
+tags:
+  - Bioinformatics
+  - Data Exploration
+draft: true
+---
+
+```{r setup, echo=F, message=F, warning=F}
+library(tidyverse)
+```

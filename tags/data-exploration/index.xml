@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Exploration on Data Science, et al.</title>
+    <link>/tags/data-exploration/</link>
+    <description>Recent content in Data Exploration on Data Science, et al.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 30 Mar 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/data-exploration/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CAFA PI Data Exploration</title>
+      <link>/posts/cafa-pi-data-exploration/</link>
+      <pubDate>Fri, 30 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/cafa-pi-data-exploration/</guid>
+      <description>The Challenge This semester, I’ve been working with the BYU Bioinformatics Research Group on the CAFA PI challenge. The goal of CAFA PI is to predict which proteins perform some specific functions. The first major roadblock: no training data was provided.
+So we divided into three groups:
+ Data acquisition (we needed to get our hands on some training data), Data transformation (said training data needed to be formatted), and Data analytics.</description>
+    </item>
+    
+  </channel>
+</rss>

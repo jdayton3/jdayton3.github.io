@@ -1,0 +1,71 @@
+---
+title: CAFA PI Data Exploration
+author: Jonathan Dayton
+date: '2018-03-30'
+slug: cafa-pi-data-exploration
+categories:
+  - Research
+tags:
+  - Bioinformatics
+  - Data Exploration
+draft: true
+---
+
+```{r setup, echo=F, message=F, warning=F}
+library(tidyverse)
+library(knitr)
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
+## The Challenge
+
+This semester, I've been working with the [BYU Bioinformatics Research Group](http://brg.byu.edu/) on the [CAFA PI](http://biofunctionprediction.org/cafa/) challenge.  The goal of CAFA PI is to predict which proteins perform some specific functions.  The first major roadblock:  **no training data** was provided.
+
+So we divided into three groups:
+
+- Data acquisition (we needed to get our hands on some training data),
+- Data transformation (said training data needed to be formatted), and
+- Data analytics.
+
+The goal of this post is to explore the test data in order to inform our future acquisition / tranformation / analytics decisions.
+
+[Insert cool meme here]
+
+## The Data
+
+### Targets
+
+CAFA PI gives us protein sequences for two organisms:  
+
+- *Pseudomonas aureginosa* (a bacteria), and
+- *Candida albicans* (a yeast).
+
+The training data comes in FASTA format, so our first order of business is to turn the FASTAs into a tidy, rectangular format.  Code to download and parse the data into CSVs can be found on our [GitHub repo](https://github.com/byubrg/cafa-pi).
+
+Let's load the data in and take a quick look:
+
+```{r, message=F, warning=F}
+pseudomonas <- read_csv("../../data/target.208963.csv")
+pseudomonas$Organism <- "Pseudomonas aureginosa"
+candida <- read_csv("../../data/target.237561.csv")
+candida$Organism <- "Candida albicans"
+targets <- bind_rows(pseudomonas, candida)
+targets %>% select(-Sequence) %>% head() %>% kable()
+targets$Sequence %>% head()
+```
+
+The first thing that really stands out here is the huge difference in lengths of the proteins.  Let's look at how sequence length is distributed.
+
+```{r}
+targets <- targets %>% mutate(seq_length=nchar(Sequence))
+targets %>% select(seq_length) %>% summary()
+targets %>% ggplot(aes(x=seq_length)) +
+  geom_histogram(aes(fill=Organism), bins=50) +
+  theme(legend.position="bottom") + 
+  labs(x="Sequence Length", y="Count", 
+       title="Sequence Lengths of CAFA PI Targets")
+```
+
+
+
+
