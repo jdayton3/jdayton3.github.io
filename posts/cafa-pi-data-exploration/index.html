@@ -157,9 +157,9 @@
 </ul>
 <p>The training data comes in FASTA format, so our first order of business is to turn the FASTAs into a tidy, rectangular format. Code to download and parse the data into CSVs can be found on our <a href="https://github.com/byubrg/cafa-pi">GitHub repo</a>.</p>
 <p>Let’s load the data in and take a quick look:</p>
-<pre class="r"><code>pseudomonas &lt;- read_csv(&quot;../../data/target.208963.csv&quot;)
+<pre class="r"><code>pseudomonas &lt;- read_csv(&quot;data/cafa-pi/target.208963.csv&quot;)
 pseudomonas$Organism &lt;- &quot;Pseudomonas aureginosa&quot;
-candida &lt;- read_csv(&quot;../../data/target.237561.csv&quot;)
+candida &lt;- read_csv(&quot;data/cafa-pi/target.237561.csv&quot;)
 candida$Organism &lt;- &quot;Candida albicans&quot;
 targets &lt;- bind_rows(pseudomonas, candida)
 targets %&gt;% select(-Sequence) %&gt;% head() %&gt;% kable()</code></pre>

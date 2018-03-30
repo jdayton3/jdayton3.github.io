@@ -45,9 +45,9 @@ The training data comes in FASTA format, so our first order of business is to tu
 Let's load the data in and take a quick look:
 
 ```{r, message=F, warning=F}
-pseudomonas <- read_csv("../../data/target.208963.csv")
+pseudomonas <- read_csv("data/cafa-pi/target.208963.csv")
 pseudomonas$Organism <- "Pseudomonas aureginosa"
-candida <- read_csv("../../data/target.237561.csv")
+candida <- read_csv("data/cafa-pi/target.237561.csv")
 candida$Organism <- "Candida albicans"
 targets <- bind_rows(pseudomonas, candida)
 targets %>% select(-Sequence) %>% head() %>% kable()
@@ -65,7 +65,5 @@ targets %>% ggplot(aes(x=seq_length)) +
   labs(x="Sequence Length", y="Count", 
        title="Sequence Lengths of CAFA PI Targets")
 ```
-
-
 
 
