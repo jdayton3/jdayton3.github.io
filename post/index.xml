@@ -6,18 +6,21 @@
     <description>Recent content in Posts on Data Science, et al.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 29 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Apr 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>CAFA PI Data Exploration</title>
-      <link>/post/cafa-pi-data-exploration/</link>
-      <pubDate>Thu, 29 Mar 2018 00:00:00 +0000</pubDate>
+      <title>Summer Goals, starting a blog in an hour a day, and Iris</title>
+      <link>/post/summer-goals-starting-a-blog-in-an-hour-a-day-and-iris/</link>
+      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/cafa-pi-data-exploration/</guid>
-      <description></description>
+      <guid>/post/summer-goals-starting-a-blog-in-an-hour-a-day-and-iris/</guid>
+      <description>Being in school is great—at the end of each semester, I feel like I can restart my life and make New Year’s Resolutions. My big goal now that the last semester is over is to develop a data science portfolio in the form of a blog.
+Link to image
+Why isn’t my link working???
+I should be</description>
     </item>
     
   </channel>

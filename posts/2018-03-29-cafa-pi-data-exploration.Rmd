@@ -15,6 +15,7 @@ draft: true
 library(tidyverse)
 library(knitr)
 knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+options(dplyr.width=Inf)
 ```
 
 ## The Challenge
@@ -37,8 +38,8 @@ The goal of this post is to explore the test data in order to inform our future 
 
 CAFA PI gives us protein sequences for two organisms:  
 
-- *Pseudomonas aureginosa* (a bacteria), and
-- *Candida albicans* (a yeast).
+- [*Pseudomonas aureginosa*](https://en.wikipedia.org/wiki/Pseudomonas_aeruginosa) (this is the spelling the CAFA website gives, but it seems like the correct spelling is *aeruginosa*), a multidrug resistant bacteria that's associated with, among other nasty things, hospital-acquired infections.
+- [*Candida albicans*](https://en.wikipedia.org/wiki/Candida_albicans), an opportunistic yeast that's found in about half of all healthy adults but that will also not hesitate to turn on you as soon as your immune system goes down.  Wikipedia says that somewhere between 2,800 and 11,200 people in the U.S. die from *Candida* infections every year.
 
 The training data comes in FASTA format, so our first order of business is to turn the FASTAs into a tidy, rectangular format.  Code to download and parse the data into CSVs can be found on our [GitHub repo](https://github.com/byubrg/cafa-pi).
 
@@ -65,5 +66,57 @@ targets %>% ggplot(aes(x=seq_length)) +
   labs(x="Sequence Length", y="Count", 
        title="Sequence Lengths of CAFA PI Targets")
 ```
+
+It looks like we have more yeast proteins than bacteria proteins and that on average the yeast proteins are longer.  I don't know a ton about the biology of proteins, but this makes intuitive sense to me---bacteria are prokaryotes, and yeast are eukaryotes, so I would expect yeast to have more and more complex proteins.
+
+Now let's take a look at that tail of super long proteins, just to see if it matches what we'd expect.
+
+```{r}
+targets %>% filter(seq_length > 2500) %>%
+  ggplot(aes(x=seq_length)) +
+  geom_histogram(aes(fill=Organism), bins=1000) +
+  theme(legend.position="bottom") +
+  labs(x="Sequence Length", "Count",
+       title="The Tail")
+```
+
+Two things here are a little interesting / unexpected to me:
+
+- Our longest protein is from our bacteria, not our yeast.  I'm not too freaked out about this, but we should take a look at that long bacteria protein just to make sure it's OK.
+- Our yeast proteins seem to almost exclusively come in pairs.  It seems really unusual to me that all of these really long proteins would have a different protein with exactly the same length.
+
+OK, let's take a look, starting with the long bacterial proteins.
+
+```{r}
+targets %>% arrange(desc(seq_length)) %>%
+  filter(Organism == "Pseudomonas aureginosa") %>%
+  select(NCBI_Locus_Tag, seq_length) %>%
+  head()
+```
+
+A quick Googling of the NCBI Locus Tags shows that these six longest bacteria sequences all have transposon mutants (for example, [PA14_32790](http://www.pseudomonas.com/feature/show/?id=1656146&view=overview)).  Not positive what that means in this context, but a transposon is a chunk of DNA that can jump into other places in DNA, so maybe these sequences are so long because extra DNA has jumped into them?  Or maybe "transposon mutants" means something else.  **Note**: Look to see if shorter sequences have transposon mutants.
+
+Now let's look to see about duplicates in our yeast.
+
+```{r}
+targets %>% arrange(desc(seq_length)) %>%
+  filter(Organism == "Candida albicans") %>%
+  select(NCBI_Locus_Tag, seq_length, Sequence) %>%
+  # Trim sequences to the first 100 chars so they display nicely
+  mutate(Sequence=str_c(str_sub(Sequence, 1, 100), "...")) %>%
+  head()
+```
+
+Looks like our identical lengths are from different alleles (slightly different copies of the same gene due to genetic variation).  Now we know!  It will be interesting to see whether our classifier predicts the same functions for two alleles of the same gene.
+
+
+
+
+
+
+
+
+
+
 
 

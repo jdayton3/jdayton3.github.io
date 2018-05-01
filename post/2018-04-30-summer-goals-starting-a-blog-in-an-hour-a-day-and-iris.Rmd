@@ -1,0 +1,18 @@
+---
+title: Summer Goals, starting a blog in an hour a day, and Iris
+author: Jonathan Dayton
+date: '2018-04-30'
+slug: summer-goals-starting-a-blog-in-an-hour-a-day-and-iris
+categories:
+  - Data Science
+tags:
+  - Data Exploration
+---
+
+Being in school is great---at the end of each semester, I feel like I can restart my life and make New Year's Resolutions.  My big goal now that the last semester is over is to develop a data science portfolio in the form of a blog.
+
+[Link to image](/img/creed_blog.jpg)
+
+Why isn't my link working???
+
+I should be 

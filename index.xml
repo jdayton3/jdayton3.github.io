@@ -2,21 +2,42 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Data Science, et al.</title>
-    <link>http://jdaytn.com/</link>
+    <link>/</link>
     <description>Recent content on Data Science, et al.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 28 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Apr 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://jdaytn.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Summer Goals, starting a blog in an hour a day, and Iris</title>
+      <link>/posts/summer-goals-starting-a-blog-in-an-hour-a-day-and-iris/</link>
+      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/summer-goals-starting-a-blog-in-an-hour-a-day-and-iris/</guid>
+      <description>Being in school is great—at the end of each semester, I feel like I can restart my life and make New Year’s Resolutions. My big resolution now that winter semester is over is to develop a data science portfolio in the form of a blog.
+I can’t dedicate my whole summer to blogging, but I am pretty confident that I can carve out an hour of time every day to spend on this.</description>
+    </item>
+    
+    <item>
+      <title>CAFA PI Data Exploration</title>
+      <link>/posts/cafa-pi-data-exploration/</link>
+      <pubDate>Fri, 30 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/cafa-pi-data-exploration/</guid>
+      <description>The Challenge This semester, I’ve been working with the BYU Bioinformatics Research Group on the CAFA PI challenge. The goal of CAFA PI is to predict which proteins perform some specific functions. The first major roadblock: no training data was provided.
+So we divided into three groups:
+ Data acquisition (we needed to get our hands on some training data), Data transformation (said training data needed to be formatted), and Data analytics.</description>
+    </item>
+    
+    <item>
       <title>About Me</title>
-      <link>http://jdaytn.com/about/</link>
+      <link>/about/</link>
       <pubDate>Wed, 28 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://jdaytn.com/about/</guid>
+      <guid>/about/</guid>
       <description>Hi! I&amp;rsquo;m Jonathan.
 I&amp;rsquo;m a biology MS student at Brigham Young University interested in deep learning, and I graduate April 2019. I&amp;rsquo;m doing cancer research and IT work.
 Check out my GitHub for projects I&amp;rsquo;ve worked on, take a look at my LinkedIn for my resume, and shoot me an email if you have any questions.</description>
@@ -24,10 +45,10 @@ Check out my GitHub for projects I&amp;rsquo;ve worked on, take a look at my Lin
     
     <item>
       <title>Testing R Markdown</title>
-      <link>http://jdaytn.com/posts/testing-r-markdown/</link>
+      <link>/posts/testing-r-markdown/</link>
       <pubDate>Wed, 28 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://jdaytn.com/posts/testing-r-markdown/</guid>
+      <guid>/posts/testing-r-markdown/</guid>
       <description>Here are a few lines of R code. For some reason the a is showing up with some really weird styling.
 a &amp;lt;- 1 b &amp;lt;- 2 c &amp;lt;- a + b c ## [1] 3 And here are a few lines of Python, just to test whether the syntax highlighting looks good.
 def say_hi(name): print(&amp;quot;Hello,&amp;quot;, name) return 1 + 2 say_hi(&amp;quot;World&amp;quot;) ## Hello, World Let’s test a knitr::kable:

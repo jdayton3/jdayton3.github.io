@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     
     	
-    <meta name="generator" content="Hugo 0.37.1" />
+    <meta name="generator" content="Hugo 0.38.2" />
     
     <title>CAFA PI Data Exploration &middot; Data Science, et al.</title>
     <meta content="CAFA PI Data Exploration - Data Science, et al." property="og:title">
@@ -130,7 +130,7 @@
       
       
       
-      </br><i class="fa fa-clock" aria-hidden="true"></i> 2 minute read
+      </br><i class="fa fa-clock" aria-hidden="true"></i> 4 minute read
       </span>  
   </div>    
   
@@ -152,8 +152,8 @@
 <h3>Targets</h3>
 <p>CAFA PI gives us protein sequences for two organisms:</p>
 <ul>
-<li><em>Pseudomonas aureginosa</em> (a bacteria), and</li>
-<li><em>Candida albicans</em> (a yeast).</li>
+<li><a href="https://en.wikipedia.org/wiki/Pseudomonas_aeruginosa"><em>Pseudomonas aureginosa</em></a> (this is the spelling the CAFA website gives, but it seems like the correct spelling is <em>aeruginosa</em>), a multidrug resistant bacteria that’s associated with, among other nasty things, hospital-acquired infections.</li>
+<li><a href="https://en.wikipedia.org/wiki/Candida_albicans"><em>Candida albicans</em></a>, an opportunistic yeast that’s found in about half of all healthy adults but that will also not hesitate to turn on you as soon as your immune system goes down. Wikipedia says that somewhere between 2,800 and 11,200 people in the U.S. die from <em>Candida</em> infections every year.</li>
 </ul>
 <p>The training data comes in FASTA format, so our first order of business is to turn the FASTAs into a tidy, rectangular format. Code to download and parse the data into CSVs can be found on our <a href="https://github.com/byubrg/cafa-pi">GitHub repo</a>.</p>
 <p>Let’s load the data in and take a quick look:</p>
@@ -234,6 +234,52 @@ targets %&gt;% select(seq_length) %&gt;% summary()</code></pre>
   labs(x=&quot;Sequence Length&quot;, y=&quot;Count&quot;, 
        title=&quot;Sequence Lengths of CAFA PI Targets&quot;)</code></pre>
 <p><img src="/posts/2018-03-29-cafa-pi-data-exploration_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>It looks like we have more yeast proteins than bacteria proteins and that on average the yeast proteins are longer. I don’t know a ton about the biology of proteins, but this makes intuitive sense to me—bacteria are prokaryotes, and yeast are eukaryotes, so I would expect yeast to have more and more complex proteins.</p>
+<p>Now let’s take a look at that tail of super long proteins, just to see if it matches what we’d expect.</p>
+<pre class="r"><code>targets %&gt;% filter(seq_length &gt; 2500) %&gt;%
+  ggplot(aes(x=seq_length)) +
+  geom_histogram(aes(fill=Organism), bins=1000) +
+  theme(legend.position=&quot;bottom&quot;) +
+  labs(x=&quot;Sequence Length&quot;, &quot;Count&quot;,
+       title=&quot;The Tail&quot;)</code></pre>
+<p><img src="/posts/2018-03-29-cafa-pi-data-exploration_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Two things here are a little interesting / unexpected to me:</p>
+<ul>
+<li>Our longest protein is from our bacteria, not our yeast. I’m not too freaked out about this, but we should take a look at that long bacteria protein just to make sure it’s OK.</li>
+<li>Our yeast proteins seem to almost exclusively come in pairs. It seems really unusual to me that all of these really long proteins would have a different protein with exactly the same length.</li>
+</ul>
+<p>OK, let’s take a look, starting with the long bacterial proteins.</p>
+<pre class="r"><code>targets %&gt;% arrange(desc(seq_length)) %&gt;%
+  filter(Organism == &quot;Pseudomonas aureginosa&quot;) %&gt;%
+  select(NCBI_Locus_Tag, seq_length) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   NCBI_Locus_Tag seq_length
+##            &lt;chr&gt;      &lt;int&gt;
+## 1     PA14_32790       5212
+## 2     PA14_33610       5149
+## 3     PA14_33280       4342
+## 4     PA14_55400       4177
+## 5     PA14_00510       3443
+## 6     PA14_05390       2476</code></pre>
+<p>A quick Googling of the NCBI Locus Tags shows that these six longest bacteria sequences all have transposon mutants (for example, <a href="http://www.pseudomonas.com/feature/show/?id=1656146&amp;view=overview">PA14_32790</a>). Not positive what that means in this context, but a transposon is a chunk of DNA that can jump into other places in DNA, so maybe these sequences are so long because extra DNA has jumped into them? Or maybe “transposon mutants” means something else. <strong>Note</strong>: Look to see if shorter sequences have transposon mutants.</p>
+<p>Now let’s look to see about duplicates in our yeast.</p>
+<pre class="r"><code>targets %&gt;% arrange(desc(seq_length)) %&gt;%
+  filter(Organism == &quot;Candida albicans&quot;) %&gt;%
+  select(NCBI_Locus_Tag, seq_length, Sequence) %&gt;%
+  # Trim sequences to the first 100 chars so they display nicely
+  mutate(Sequence=str_c(str_sub(Sequence, 1, 100), &quot;...&quot;)) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   NCBI_Locus_Tag seq_length                                                                                                Sequence
+##            &lt;chr&gt;      &lt;int&gt;                                                                                                   &lt;chr&gt;
+## 1    C4_00970C_A       5035 MNNHITISFNQGEELYSTYKSFYTLKKLPNQLFKFNKSLSIDEILNQLSLLALDHTLPTYYCYKPIFLELVARWVNNTIELESQYNKSKSETRRISGSVI...
+## 2    C4_00970C_B       5035 MNNHITISFNQGEELYSTYKSFYTLKKLPNQLFKFNKSLSIDEILNQLSLLALDHTLPTYYCYKPIFLELIARWVNNSIELESQYNKSKSETRKIPGSII...
+## 3    C3_05210C_B       4161 MEESVTPLLSVNQLYDCIIGFLPFNENVPKFTQCEDVLTKFISNNNQDTLYLIKSIEEKTSRISNDLSDLDMGFKDLDTFVIIIKSKGELRNDIPLTQQL...
+## 4    C3_05210C_A       4161 MEESVTPLLSVNQLYDCIIGFLPFNENVPKFTQCEDVLTKFISNNNQDTLYLIKSIEEKTSRISNDLSDLDMGFKDLDTFVIIIKSKGELRNDIPLTQQL...
+## 5    C4_06130W_A       3826 MSSKEKPSKEDIRGQLSDIQKRLFSKKPSSGDTSGATTSASTNSNHRPVLKESNHHPQGKSSLLSGGVGSHEQERFADFLPPLPKGSGNASASLGPPAPT...
+## 6    C4_06130W_B       3826 MSSKEKPSKEDIRGQLSDIQKRLFSKKPSSGDTSGATTSASTNSNHRPVLKESNHHPQGKSSLLSGGVGSHEQERFADFLPPLPKGSGNASASLGPPAPT...</code></pre>
+<p>Looks like our identical lengths are from different alleles (slightly different copies of the same gene due to genetic variation). Now we know! It will be interesting to see whether our classifier predicts the same functions for two alleles of the same gene.</p>
 </div>
 </div>
 
