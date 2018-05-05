@@ -1,7 +1,7 @@
 ---
 title: What makes some blink-182 songs more popular than others? Part 1
 author: Jonathan Dayton
-date: '2018-05-02'
+date: '2018-05-05'
 slug: download-blink-182-data
 categories:
   - Data Science
