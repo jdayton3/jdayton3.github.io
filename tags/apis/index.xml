@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Data Science on Data Science, et al.</title>
-    <link>/categories/data-science/</link>
-    <description>Recent content in Data Science on Data Science, et al.</description>
+    <title>Apis on Data Science, et al.</title>
+    <link>/tags/apis/</link>
+    <description>Recent content in Apis on Data Science, et al.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/data-science/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/apis/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>/posts/download-blink-182-data/</guid>
       <description>Justification (Background) For Christmas one year while I was in elementary school, my next-door neighbor got a GameCube from Santa Claus, and he gave me his old Nintendo 64 along with all his games. I was in heaven.
 I would play Tony Hawk Pro Skater 3 for hours and hours (until I got a C+ in my 6th grade English class and my mom took it away). I didn’t have a memory card, so I had to leave the game running overnight for several days in order to make it to the later levels of the game.</description>
-    </item>
-    
-    <item>
-      <title>Summer Goals, starting a blog in an hour a day, and Iris</title>
-      <link>/posts/summer-goals-starting-a-blog-in-an-hour-a-day-and-iris/</link>
-      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/summer-goals-starting-a-blog-in-an-hour-a-day-and-iris/</guid>
-      <description>Being in school is great—at the end of each semester, I feel like I can restart my life and make New Year’s Resolutions. My big resolution now that winter semester is over is to develop a data science portfolio in the form of a blog.
-I can’t dedicate my whole summer to blogging, but I am pretty confident that I can carve out an hour of time every day to spend on this.</description>
     </item>
     
   </channel>

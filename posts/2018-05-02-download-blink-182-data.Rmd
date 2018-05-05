@@ -1,0 +1,400 @@
+---
+title: What makes some blink-182 songs more popular than others? Part 1
+author: Jonathan Dayton
+date: '2018-05-02'
+slug: download-blink-182-data
+categories:
+  - Data Science
+tags:
+  - Music
+  - Python
+  - APIs
+---
+
+```{r setup, include=FALSE}
+library(reticulate)
+library(tidyverse)
+library(tidytext)
+use_condaenv("py36")
+```
+
+## Justification (Background)
+
+For Christmas one year while I was in elementary school, my next-door neighbor got a GameCube from Santa Claus, and he gave me his old Nintendo 64 along with all his games.  I was in heaven.  
+
+![](/img/n64.png)
+
+I would play Tony Hawk Pro Skater 3 for hours and hours (until I got a C+ in my 6th grade English class and my mom took it away).  I didn't have a memory card, so I had to leave the game running overnight for several days in order to make it to the later levels of the game.
+
+All this must have occurred in a particularly formative time in my development, because roughly 75% of my taste in music is still based on the soundtrack of that Tony Hawk game.
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/aZeUFLUrOw4?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+Skateboarding and punk music were a match made in heaven.  So when I discovered the skate punk band blink-182, I was certain that I'd found the best band in existence.
+
+It's been a few years, and now I have a scientific curiosity.  Wikipedia says they've [recorded 155 songs](https://en.wikipedia.org/wiki/List_of_songs_recorded_by_Blink-182), but I'm only familiar with about 10-15 of them.  So, my question: what is it about certain blink-182 songs that made them so popular?  In particular, are there any patterns in the _lyrics_ that tend to predict the popularity of these songs?
+
+In order to answer this burning question, we need data:
+
+- The lyrics for each song
+- The popularity of each song
+- Album info like track number, year released, etc.
+- A list of words that may be appropriate for a punk song but not for my blog
+
+The data collection and cleaning for this make up a fairly large project, so this will be a two-part blog.  This week, I'll get and prepare the data; next week, I'll analyze it.
+
+## Let's get some info from Spotify
+
+We need to connect to Spotify's API to get info about the song (length, popularity, etc.).  First, we sign up for an API key at the [Spotify for Developers site](https://beta.developer.spotify.com/).
+
+![(Image source: https://beta.developer.spotify.com/documentation/web-api/)](/img/spotify-api.png)
+
+Once we have that, we can use the [Spotipy](https://github.com/plamere/spotipy) client to connect.  Sometime in the last year, Spotify started requiring all API requests to be authenticated, but at the time of writing, Spotipy's [documentation](http://spotipy.readthedocs.io/en/latest/) hasn't been updated to reflect that.  But after I found [this StackOverflow answer](https://stackoverflow.com/a/46994946/6481442) and got authenticated, the rest of the documentation was fantastic.  OK, let's connect:
+
+```{python eval=FALSE}
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+id_ = "my client id"
+secret = "my api secret"
+ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=ccm)
+```
+
+_Note: I couldn't get the SSL library and the `reticulate` library to play nice together, so I actually ran the Python API access in a [Jupyter Notebook](http://jupyter.org/)._ 
+
+We're connected!  That was easy!  
+
+Now we need to do a few things:
+
+1. Figure out what the artist's ID is on Spotify
+2. Get a list of all album IDs for the artist
+3. Get a list of track IDs for each album
+4. Get the Track objects for each track ID
+5. Get the audio features for each track
+
+### Artist ID
+
+We'll search for the artist "blink-182".  Then we take the first track and get the artist's URI (the API allows you to search by ID or URI).  I'm assuming that 1. Spotify will give us the tracks in order of popularity, and 2. the most popular song with an artist that matches the search string "blink-182" will actually be the illustrious [blink-182](https://en.wikipedia.org/wiki/Blink-182).  From what I've seen while testing the API, it looks like both of these assumptions are met.
+
+```{python eval=FALSE}
+results = sp.search("artist:blink-182")
+artist_id = results['tracks']['items'][0]['artists'][0]['uri']
+print(artist_id)
+```
+
+```
+## spotify:artist:6FBDaR13swtiWwGhX1WQsP
+```
+
+We can now use that ID to search for the artist's albums.
+
+### Albums
+
+```{python eval=FALSE}
+albums = sp.artist_albums(artist_id, country="US", limit=50)
+print(albums['next'])
+```
+
+```
+## None
+```
+
+Since there's no "next" URL, that means that we got all the albums by blink-182 in one request.  If there were more than 50 albums, we would have to access the next batch at the "next" URL
+
+Now let's pull out just the identifiers for each album.
+
+```{python eval=F}
+album_ids = [album['uri'] for album in albums['items']]
+print(len(album_ids))
+print(album_ids[0])
+```
+
+```
+## 46
+## spotify:album:0jLf8ecN5HjstQqPAjJlsS
+```
+
+46 albums! Wow! I wonder if we got any albums that aren't by blink-182? Or duplicates? Let's grab the tracks and look to see why there are so many albums.
+
+```{python eval=F}
+all_tracks = []
+for album_id in album_ids:
+    tracks = sp.album_tracks(album_id, limit=50)
+    all_tracks.append(tracks)
+```
+
+How many tracks are there in each album?
+
+```{python eval=F}
+for tracks, album in zip(all_tracks, albums.get('items')):
+    print(
+        len(tracks.get('items')),
+        "\t",
+        album.get('name')
+    )
+```
+
+```
+## 28 	 California (Deluxe Edition)
+## 16 	 California
+## 27 	 Neighborhoods (Deluxe Explicit Version)
+## 14 	 Neighborhoods (Deluxe)
+## 14 	 Neighborhoods (Deluxe Version)
+## 10 	 Neighborhoods
+## 16 	 blink-182
+## 15 	 blink-182
+## 13 	 Take Off Your Pants And Jacket
+## 13 	 Take Off Your Pants And Jacket
+## 12 	 Enema Of The State
+## 12 	 Enema Of The State
+## 14 	 Buddha
+## 15 	 Dude Ranch
+## 16 	 Cheshire Cat
+## 1 	 Wildfire
+## 1 	 6/8
+## 1 	 Can't Get You More Pregnant
+## 1 	 Misery
+## 1 	 Parking Lot
+## 1 	 Bored To Death (Steve Aoki Remix)
+## 1 	 No Future
+## 1 	 Rabbit Hole
+## 1 	 Bored To Death
+## 5 	 Dogs Eating Dogs
+## 1 	 Up All Night
+## 4 	 I Won't Be Home For Christmas
+## 18 	 Greatest Hits
+## 17 	 Greatest Hits
+## 23 	 Festival Anthems
+## 23 	 Road Trip Sing-Along Songs
+## 20 	 Throwback Tunes: 90s
+## 22 	 Christmas Rock
+## 5 	 Buona La Prima
+## 20 	 20 #1’s: 90s
+## 20 	 20 #1’s: Alternative Rock
+## 28 	 Runtastic - Power Workout (Vol. 1)
+## 15 	 Digital Snow: Music Motion Picture Show (Digitally Remastered)
+## 14 	 Revolutionary bands
+## 5 	 We Won't Be Home For Christmas
+## 15 	 Mixed Martial Arts, Vol. 1.
+## 15 	 American Pie 2
+## 15 	 Loose Change Soundtrack
+## 20 	 No Stars, Just Talent
+## 15 	 Can't Hardly Wait
+## 30 	 Punk Sucks
+```
+
+Looks like we have some standard data issues!:
+
+- Exact Duplicates (e.g. 2 "Enema Of The State"s)
+- Semi Duplicates (Should "blink-182" have 16 or 15 tracks?)
+- Inconsistent data (We have commentary albums, normal albums, EPs, singles, and a greatest hits album. Since these represent different domains, should any of those be filtered out?)
+- Bad data (The last ~15 albums have music from other artists)
+- Missing data ([Wikipedia says](https://en.wikipedia.org/wiki/List_of_songs_recorded_by_Blink-182) that blink-182 should have a 1993 album called "Flyswatter")
+
+As in most such cases, there isn't an obvious right way to handle these issues.  So... Let's just plan to:
+
+1. Get the info for each song
+2. Remove songs that aren't by blink-182 (bad data)
+3. Remove exact duplicate albums
+4. Record instances of duplicate songs and use that data to inform semi-duplicate removal
+5. Make a more informed decision about how to handle the different album types
+
+### Tracks
+
+The tracks that came with the album objects don't contain Spotify's popularity metric. In order to get that, we need to get the tracks' IDs and then query for the tracks.
+
+```{python eval=F}
+track_ids = []
+for tracks in all_tracks:
+    album_tracks = []
+    for track in tracks.get('items'):
+        album_tracks.append(track.get('uri'))
+    track_ids.append(album_tracks)
+```
+
+I'd like to grab all of the tracks in the same request, but Spotify's API doesn't allow requests with a size greater than 50.  So we'll just keep grouping them by album.
+
+```{python eval=F}
+track_objects = []
+for track_id_list in track_ids:
+    tracks = sp.tracks(track_id_list)
+    track_objects.append(tracks)
+```
+
+Spotify's API also lets you get their machine-generated features of the songs (for example, "danceability", "energy", etc.).  Let's also get those just for fun:
+
+```{python eval=F}
+audio_feature_objects = []
+for track_id_list in track_ids:
+    features = sp.audio_features(track_id_list)
+    audio_feature_objects.append(features)
+```
+
+We now have all the data we need from Spotify!  We'll need to reformat in order to use it, but let's make a temporary copy of the data as is so we don't have to download it from Spotify again.
+
+```{python eval=F}
+spotify_data = {
+    "audio_features": audio_feature_objects,
+    "tracks": track_objects
+}
+path = "~/Documents/datasets/bl182/spotify.json"
+import json
+with open(path, "w") as outfile:
+    json.dump(spotify_data, outfile)
+```
+
+### Reformatting from a dictionary to a table
+
+In order to do the analysis I want to in R, I need the data in a table.  Let's extract that from our dictionary.  (Sorry for the big ugly block of code.  If you know of a better, cleaner way to go from a nested dictionary to a dataframe, please leave a comment!)
+
+```{python eval=F}
+df = pd.DataFrame(columns=[
+    'name',
+    'duration_ms',
+    'popularity',
+    'num_markets',
+    'album',
+    'disc_number',
+    'is_explicit',
+    'track_number',
+    'release_date',
+    'artist',
+    'danceability',
+    'energy',
+    'key',
+    'loudness',
+    'mode',
+    'speechiness',
+    'acousticness',
+    'instrumentalness',
+    'liveness',
+    'valence',
+    'tempo',
+    'time_signature',
+])
+for album_info, album_features in zip(
+        spotify_data.get('tracks'), 
+        spotify_data.get('audio_features')
+        ):
+    for track_info, track_features in zip(
+        album_info.get('tracks'),
+        album_features
+        ):
+        y = {
+            'name': track_info['name'],
+            'duration_ms': track_info['duration_ms'],
+            'popularity': track_info['popularity'],
+            'num_markets': len(track_info['available_markets']),
+            'album': track_info['album']['name'],
+            'disc_number': track_info['disc_number'],
+            'is_explicit': track_info['explicit'],
+            'track_number': track_info['track_number'],
+            'release_date': track_info['album']['release_date'],
+            'artist': track_info['artists'][0]['name'],
+            'danceability': track_features['danceability'],
+            'energy': track_features['energy'],
+            'key': track_features['key'],
+            'loudness': track_features['loudness'],
+            'mode': track_features['mode'],
+            'speechiness': track_features['speechiness'],
+            'acousticness': track_features['acousticness'],
+            'instrumentalness': track_features['instrumentalness'],
+            'liveness': track_features['liveness'],
+            'valence': track_features['valence'],
+            'tempo': track_features['tempo'],
+            'time_signature': track_features['time_signature'],
+        }
+        df = df.append(y, ignore_index=True)
+info_path = "~/Documents/datasets/bl182/spotify.csv"
+df.to_csv(info_path, index=False)
+print(df.iloc[0])
+```
+
+```
+## name                                    Cynical
+## duration_ms                              115520
+## popularity                                   53
+## num_markets                                  62
+## album               California (Deluxe Edition)
+## disc_number                                   1
+## is_explicit                               False
+## track_number                                  1
+## release_date                         2017-05-19
+## artist                                blink-182
+## danceability                              0.495
+## energy                                    0.965
+## key                                           5
+## loudness                                 -2.964
+## mode                                          1
+## speechiness                               0.188
+## acousticness                            0.00267
+## instrumentalness                              0
+## liveness                                 0.0763
+## valence                                   0.254
+## tempo                                   100.028
+## time_signature                                4
+## Name: 0, dtype: object
+```
+
+## Now we need the lyrics
+
+We'll use johnwmillr's fantastic [LyricsGenius package](https://github.com/johnwmillr/LyricsGenius) to access the Genius Lyrics API (see the repo for instructions on how to get started).
+
+```{python eval=F}
+import lyricsgenius as genius
+api = genius.Genius('client_access_token')
+artist = api.search_artist('blink-182')
+lyrics = artist.save_lyrics()
+```
+
+How easy was that to download all the lyrics for all the blink-182 songs??
+
+![](/img/shoulders-of-giants.png)
+
+Let's put the lyrics in a table format now.
+
+```{python eval=F}
+lyric_path = "~/Documents/datasets/bl182/lyrics.csv"
+lyrics.keys()
+songs = lyrics.get('songs')
+lyric_df = pd.DataFrame(columns=['name', 'lyrics'])
+for x in songs:
+    lyric_df = lyric_df.append({
+        'name': x.get('title'),
+        'lyrics': x.get('lyrics')
+    }, ignore_index=True)
+lyric_df.to_csv(lyric_path, index=False)
+lyric_df.iloc[0]
+```
+
+```
+## name                                               13 Miles
+## lyrics    13 miles down the road lives a young boy\nHe's...
+## Name: 0, dtype: object
+```
+
+## Offensive / Profane Words
+
+Since I'm analyzing the effect lyrics have on the popularity of songs, I will want to display some of the lyrics. Considering that:
+
+- Punk music came about because people thought contemporary [rock-and-roll wasn't wild enough](https://en.wikipedia.org/wiki/Punk_rock#Philosophy),
+- blink-182 wrote a number of "joke songs" where part of the joke is that they are shockingly profane, and
+- The purpose of my blog is neither to offend nor to be unusually wild,
+
+I want to mask offensive words (something like `word`&rarr;`w***`) before displaying them.
+
+Luis von Ahn's research group at Carnegie Mellon has generously [posted a list of offensive words](https://www.cs.cmu.edu/~biglou/resources/) that I will be using to identify words in these lyrics that may be offensive.
+
+```{python eval=F}
+from urllib.request import urlopen
+url = "https://www.cs.cmu.edu/~biglou/resources/bad-words.txt"
+
+curses = urlopen(url).read().decode('utf-8').strip().split("\n")
+curse_df = pd.DataFrame({'word': curses})
+curse_path = "~/Documents/datasets/bl182/curses.csv"
+curse_df.to_csv(curse_path, index=False)
+```
+
+## The end
+
+Reading back through this post, I wish there were more pictures and fewer lines of code! But after all that API-calling and data-reformatting, we now have some good data to analyze and visualize next week.  And in the process, I got to listen to some good music.  No regrets!

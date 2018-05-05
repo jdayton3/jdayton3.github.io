@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices --> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    	
+    <meta name="generator" content="Hugo 0.38.2" />
+    
+    <title>What makes some blink-182 songs more popular than others? Part 1 &middot; Data Science, et al.</title>
+    <meta content="What makes some blink-182 songs more popular than others? Part 1 - Data Science, et al." property="og:title">
+    <meta content=" - " property="og:description">    
+    <!-- CSS --> 
+    <link rel="stylesheet" href="/css/print.css" media="print">
+    <link rel="stylesheet" href="/css/poole.css">
+    <link rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500">
+    
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- highlight.js--> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/ir-black.min.css">
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body>
+        <div class="sidebar">
+	<div class="container text-center sidebar-sticky">
+		<div class="sidebar-about text-center">
+			<a href="/"><h1 class="brand">Data Science, et al.</h1></a>
+			 <img src="/img/jonathan.jpg" alt="Author Image" class="img-circle headshot center"> 
+			<p class="lead">
+				 by Jonathan Dayton 
+			</p>
+		</div>
+		
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/posts/"> <span>Blog</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+        <p>
+		<section class="row text-center">
+	
+	<a href="https://twitter.com/JDayton23"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/jdayton3"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	&nbsp;<a href="https://linkedin.com/in/jdayton3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://stackoverflow.com/users/6481442"><i class="fab fa-stack-overflow fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	&nbsp;<a href="mailto:jonathandayton23@gmail.com"><i class="fas fa-at fa-lg" aria-hidden="true"></i></a>
+	
+</section>
+
+        </p>
+		<p class="copyright">&copy; 2018 Jonathan Dayton.
+        <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+        </p>
+	</div>
+	<div>
+	</div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>What makes some blink-182 songs more popular than others? Part 1</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       <i class="fa fa-calendar" aria-hidden="true"></i> May 2, 2018 
+      
+      
+        
+        
+            in
+            
+            
+                <a class="meta" href="/categories/data-science">DATA SCIENCE</a>
+                
+            
+        
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fa fa-tags" aria-hidden="true"></i>
+            
+            <a class="meta" href="/tags/apis">apis</a> 
+        
+            <a class="meta" href="/tags/music">music</a> 
+        
+            <a class="meta" href="/tags/python">python</a>
+        
+      
+      
+      
+      </br><i class="fa fa-clock" aria-hidden="true"></i> 9 minute read
+      </span>  
+  </div>    
+  
+  <div id="justification-background" class="section level2">
+<h2>Justification (Background)</h2>
+<p>For Christmas one year while I was in elementary school, my next-door neighbor got a GameCube from Santa Claus, and he gave me his old Nintendo 64 along with all his games. I was in heaven.</p>
+<p><img src="/img/n64.png" /></p>
+<p>I would play Tony Hawk Pro Skater 3 for hours and hours (until I got a C+ in my 6th grade English class and my mom took it away). I didn’t have a memory card, so I had to leave the game running overnight for several days in order to make it to the later levels of the game.</p>
+<p>All this must have occurred in a particularly formative time in my development, because roughly 75% of my taste in music is still based on the soundtrack of that Tony Hawk game.</p>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/aZeUFLUrOw4?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+<p>Skateboarding and punk music were a match made in heaven. So when I discovered the skate punk band blink-182, I was certain that I’d found the best band in existence.</p>
+<p>It’s been a few years, and now I have a scientific curiosity. Wikipedia says they’ve <a href="https://en.wikipedia.org/wiki/List_of_songs_recorded_by_Blink-182">recorded 155 songs</a>, but I’m only familiar with about 10-15 of them. So, my question: what is it about certain blink-182 songs that made them so popular? In particular, are there any patterns in the <em>lyrics</em> that tend to predict the popularity of these songs?</p>
+<p>In order to answer this burning question, we need data:</p>
+<ul>
+<li>The lyrics for each song</li>
+<li>The popularity of each song</li>
+<li>Album info like track number, year released, etc.</li>
+<li>A list of words that may be appropriate for a punk song but not for my blog</li>
+</ul>
+<p>The data collection and cleaning for this make up a fairly large project, so this will be a two-part blog. This week, I’ll get and prepare the data; next week, I’ll analyze it.</p>
+</div>
+<div id="lets-get-some-info-from-spotify" class="section level2">
+<h2>Let’s get some info from Spotify</h2>
+<p>We need to connect to Spotify’s API to get info about the song (length, popularity, etc.). First, we sign up for an API key at the <a href="https://beta.developer.spotify.com/">Spotify for Developers site</a>.</p>
+<div class="figure">
+<img src="/img/spotify-api.png" alt="(Image source: https://beta.developer.spotify.com/documentation/web-api/)" />
+<p class="caption">(Image source: <a href="https://beta.developer.spotify.com/documentation/web-api/" class="uri">https://beta.developer.spotify.com/documentation/web-api/</a>)</p>
+</div>
+<p>Once we have that, we can use the <a href="https://github.com/plamere/spotipy">Spotipy</a> client to connect. Sometime in the last year, Spotify started requiring all API requests to be authenticated, but at the time of writing, Spotipy’s <a href="http://spotipy.readthedocs.io/en/latest/">documentation</a> hasn’t been updated to reflect that. But after I found <a href="https://stackoverflow.com/a/46994946/6481442">this StackOverflow answer</a> and got authenticated, the rest of the documentation was fantastic. OK, let’s connect:</p>
+<pre class="python"><code>import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+id_ = &quot;my client id&quot;
+secret = &quot;my api secret&quot;
+ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=ccm)</code></pre>
+<p><em>Note: I couldn’t get the SSL library and the <code>reticulate</code> library to play nice together, so I actually ran the Python API access in a <a href="http://jupyter.org/">Jupyter Notebook</a>.</em></p>
+<p>We’re connected! That was easy!</p>
+<p>Now we need to do a few things:</p>
+<ol style="list-style-type: decimal">
+<li>Figure out what the artist’s ID is on Spotify</li>
+<li>Get a list of all album IDs for the artist</li>
+<li>Get a list of track IDs for each album</li>
+<li>Get the Track objects for each track ID</li>
+<li>Get the audio features for each track</li>
+</ol>
+<div id="artist-id" class="section level3">
+<h3>Artist ID</h3>
+<p>We’ll search for the artist “blink-182”. Then we take the first track and get the artist’s URI (the API allows you to search by ID or URI). I’m assuming that 1. Spotify will give us the tracks in order of popularity, and 2. the most popular song with an artist that matches the search string “blink-182” will actually be the illustrious <a href="https://en.wikipedia.org/wiki/Blink-182">blink-182</a>. From what I’ve seen while testing the API, it looks like both of these assumptions are met.</p>
+<pre class="python"><code>results = sp.search(&quot;artist:blink-182&quot;)
+artist_id = results[&#39;tracks&#39;][&#39;items&#39;][0][&#39;artists&#39;][0][&#39;uri&#39;]
+print(artist_id)</code></pre>
+<pre><code>## spotify:artist:6FBDaR13swtiWwGhX1WQsP</code></pre>
+<p>We can now use that ID to search for the artist’s albums.</p>
+</div>
+<div id="albums" class="section level3">
+<h3>Albums</h3>
+<pre class="python"><code>albums = sp.artist_albums(artist_id, country=&quot;US&quot;, limit=50)
+print(albums[&#39;next&#39;])</code></pre>
+<pre><code>## None</code></pre>
+<p>Since there’s no “next” URL, that means that we got all the albums by blink-182 in one request. If there were more than 50 albums, we would have to access the next batch at the “next” URL</p>
+<p>Now let’s pull out just the identifiers for each album.</p>
+<pre class="python"><code>album_ids = [album[&#39;uri&#39;] for album in albums[&#39;items&#39;]]
+print(len(album_ids))
+print(album_ids[0])</code></pre>
+<pre><code>## 46
+## spotify:album:0jLf8ecN5HjstQqPAjJlsS</code></pre>
+<p>46 albums! Wow! I wonder if we got any albums that aren’t by blink-182? Or duplicates? Let’s grab the tracks and look to see why there are so many albums.</p>
+<pre class="python"><code>all_tracks = []
+for album_id in album_ids:
+    tracks = sp.album_tracks(album_id, limit=50)
+    all_tracks.append(tracks)</code></pre>
+<p>How many tracks are there in each album?</p>
+<pre class="python"><code>for tracks, album in zip(all_tracks, albums.get(&#39;items&#39;)):
+    print(
+        len(tracks.get(&#39;items&#39;)),
+        &quot;\t&quot;,
+        album.get(&#39;name&#39;)
+    )</code></pre>
+<pre><code>## 28    California (Deluxe Edition)
+## 16    California
+## 27    Neighborhoods (Deluxe Explicit Version)
+## 14    Neighborhoods (Deluxe)
+## 14    Neighborhoods (Deluxe Version)
+## 10    Neighborhoods
+## 16    blink-182
+## 15    blink-182
+## 13    Take Off Your Pants And Jacket
+## 13    Take Off Your Pants And Jacket
+## 12    Enema Of The State
+## 12    Enema Of The State
+## 14    Buddha
+## 15    Dude Ranch
+## 16    Cheshire Cat
+## 1     Wildfire
+## 1     6/8
+## 1     Can&#39;t Get You More Pregnant
+## 1     Misery
+## 1     Parking Lot
+## 1     Bored To Death (Steve Aoki Remix)
+## 1     No Future
+## 1     Rabbit Hole
+## 1     Bored To Death
+## 5     Dogs Eating Dogs
+## 1     Up All Night
+## 4     I Won&#39;t Be Home For Christmas
+## 18    Greatest Hits
+## 17    Greatest Hits
+## 23    Festival Anthems
+## 23    Road Trip Sing-Along Songs
+## 20    Throwback Tunes: 90s
+## 22    Christmas Rock
+## 5     Buona La Prima
+## 20    20 #1’s: 90s
+## 20    20 #1’s: Alternative Rock
+## 28    Runtastic - Power Workout (Vol. 1)
+## 15    Digital Snow: Music Motion Picture Show (Digitally Remastered)
+## 14    Revolutionary bands
+## 5     We Won&#39;t Be Home For Christmas
+## 15    Mixed Martial Arts, Vol. 1.
+## 15    American Pie 2
+## 15    Loose Change Soundtrack
+## 20    No Stars, Just Talent
+## 15    Can&#39;t Hardly Wait
+## 30    Punk Sucks</code></pre>
+<p>Looks like we have some standard data issues!:</p>
+<ul>
+<li>Exact Duplicates (e.g. 2 “Enema Of The State”s)</li>
+<li>Semi Duplicates (Should “blink-182” have 16 or 15 tracks?)</li>
+<li>Inconsistent data (We have commentary albums, normal albums, EPs, singles, and a greatest hits album. Since these represent different domains, should any of those be filtered out?)</li>
+<li>Bad data (The last ~15 albums have music from other artists)</li>
+<li>Missing data (<a href="https://en.wikipedia.org/wiki/List_of_songs_recorded_by_Blink-182">Wikipedia says</a> that blink-182 should have a 1993 album called “Flyswatter”)</li>
+</ul>
+<p>As in most such cases, there isn’t an obvious right way to handle these issues. So… Let’s just plan to:</p>
+<ol style="list-style-type: decimal">
+<li>Get the info for each song</li>
+<li>Remove songs that aren’t by blink-182 (bad data)</li>
+<li>Remove exact duplicate albums</li>
+<li>Record instances of duplicate songs and use that data to inform semi-duplicate removal</li>
+<li>Make a more informed decision about how to handle the different album types</li>
+</ol>
+</div>
+<div id="tracks" class="section level3">
+<h3>Tracks</h3>
+<p>The tracks that came with the album objects don’t contain Spotify’s popularity metric. In order to get that, we need to get the tracks’ IDs and then query for the tracks.</p>
+<pre class="python"><code>track_ids = []
+for tracks in all_tracks:
+    album_tracks = []
+    for track in tracks.get(&#39;items&#39;):
+        album_tracks.append(track.get(&#39;uri&#39;))
+    track_ids.append(album_tracks)</code></pre>
+<p>I’d like to grab all of the tracks in the same request, but Spotify’s API doesn’t allow requests with a size greater than 50. So we’ll just keep grouping them by album.</p>
+<pre class="python"><code>track_objects = []
+for track_id_list in track_ids:
+    tracks = sp.tracks(track_id_list)
+    track_objects.append(tracks)</code></pre>
+<p>Spotify’s API also lets you get their machine-generated features of the songs (for example, “danceability”, “energy”, etc.). Let’s also get those just for fun:</p>
+<pre class="python"><code>audio_feature_objects = []
+for track_id_list in track_ids:
+    features = sp.audio_features(track_id_list)
+    audio_feature_objects.append(features)</code></pre>
+<p>We now have all the data we need from Spotify! We’ll need to reformat in order to use it, but let’s make a temporary copy of the data as is so we don’t have to download it from Spotify again.</p>
+<pre class="python"><code>spotify_data = {
+    &quot;audio_features&quot;: audio_feature_objects,
+    &quot;tracks&quot;: track_objects
+}
+path = &quot;~/Documents/datasets/bl182/spotify.json&quot;
+import json
+with open(path, &quot;w&quot;) as outfile:
+    json.dump(spotify_data, outfile)</code></pre>
+</div>
+<div id="reformatting-from-a-dictionary-to-a-table" class="section level3">
+<h3>Reformatting from a dictionary to a table</h3>
+<p>In order to do the analysis I want to in R, I need the data in a table. Let’s extract that from our dictionary. (Sorry for the big ugly block of code. If you know of a better, cleaner way to go from a nested dictionary to a dataframe, please leave a comment!)</p>
+<pre class="python"><code>df = pd.DataFrame(columns=[
+    &#39;name&#39;,
+    &#39;duration_ms&#39;,
+    &#39;popularity&#39;,
+    &#39;num_markets&#39;,
+    &#39;album&#39;,
+    &#39;disc_number&#39;,
+    &#39;is_explicit&#39;,
+    &#39;track_number&#39;,
+    &#39;release_date&#39;,
+    &#39;artist&#39;,
+    &#39;danceability&#39;,
+    &#39;energy&#39;,
+    &#39;key&#39;,
+    &#39;loudness&#39;,
+    &#39;mode&#39;,
+    &#39;speechiness&#39;,
+    &#39;acousticness&#39;,
+    &#39;instrumentalness&#39;,
+    &#39;liveness&#39;,
+    &#39;valence&#39;,
+    &#39;tempo&#39;,
+    &#39;time_signature&#39;,
+])
+for album_info, album_features in zip(
+        spotify_data.get(&#39;tracks&#39;), 
+        spotify_data.get(&#39;audio_features&#39;)
+        ):
+    for track_info, track_features in zip(
+        album_info.get(&#39;tracks&#39;),
+        album_features
+        ):
+        y = {
+            &#39;name&#39;: track_info[&#39;name&#39;],
+            &#39;duration_ms&#39;: track_info[&#39;duration_ms&#39;],
+            &#39;popularity&#39;: track_info[&#39;popularity&#39;],
+            &#39;num_markets&#39;: len(track_info[&#39;available_markets&#39;]),
+            &#39;album&#39;: track_info[&#39;album&#39;][&#39;name&#39;],
+            &#39;disc_number&#39;: track_info[&#39;disc_number&#39;],
+            &#39;is_explicit&#39;: track_info[&#39;explicit&#39;],
+            &#39;track_number&#39;: track_info[&#39;track_number&#39;],
+            &#39;release_date&#39;: track_info[&#39;album&#39;][&#39;release_date&#39;],
+            &#39;artist&#39;: track_info[&#39;artists&#39;][0][&#39;name&#39;],
+            &#39;danceability&#39;: track_features[&#39;danceability&#39;],
+            &#39;energy&#39;: track_features[&#39;energy&#39;],
+            &#39;key&#39;: track_features[&#39;key&#39;],
+            &#39;loudness&#39;: track_features[&#39;loudness&#39;],
+            &#39;mode&#39;: track_features[&#39;mode&#39;],
+            &#39;speechiness&#39;: track_features[&#39;speechiness&#39;],
+            &#39;acousticness&#39;: track_features[&#39;acousticness&#39;],
+            &#39;instrumentalness&#39;: track_features[&#39;instrumentalness&#39;],
+            &#39;liveness&#39;: track_features[&#39;liveness&#39;],
+            &#39;valence&#39;: track_features[&#39;valence&#39;],
+            &#39;tempo&#39;: track_features[&#39;tempo&#39;],
+            &#39;time_signature&#39;: track_features[&#39;time_signature&#39;],
+        }
+        df = df.append(y, ignore_index=True)
+info_path = &quot;~/Documents/datasets/bl182/spotify.csv&quot;
+df.to_csv(info_path, index=False)
+print(df.iloc[0])</code></pre>
+<pre><code>## name                                    Cynical
+## duration_ms                              115520
+## popularity                                   53
+## num_markets                                  62
+## album               California (Deluxe Edition)
+## disc_number                                   1
+## is_explicit                               False
+## track_number                                  1
+## release_date                         2017-05-19
+## artist                                blink-182
+## danceability                              0.495
+## energy                                    0.965
+## key                                           5
+## loudness                                 -2.964
+## mode                                          1
+## speechiness                               0.188
+## acousticness                            0.00267
+## instrumentalness                              0
+## liveness                                 0.0763
+## valence                                   0.254
+## tempo                                   100.028
+## time_signature                                4
+## Name: 0, dtype: object</code></pre>
+</div>
+</div>
+<div id="now-we-need-the-lyrics" class="section level2">
+<h2>Now we need the lyrics</h2>
+<p>We’ll use johnwmillr’s fantastic <a href="https://github.com/johnwmillr/LyricsGenius">LyricsGenius package</a> to access the Genius Lyrics API (see the repo for instructions on how to get started).</p>
+<pre class="python"><code>import lyricsgenius as genius
+api = genius.Genius(&#39;client_access_token&#39;)
+artist = api.search_artist(&#39;blink-182&#39;)
+lyrics = artist.save_lyrics()</code></pre>
+<p>How easy was that to download all the lyrics for all the blink-182 songs??</p>
+<p><img src="/img/shoulders-of-giants.png" /></p>
+<p>Let’s put the lyrics in a table format now.</p>
+<pre class="python"><code>lyric_path = &quot;~/Documents/datasets/bl182/lyrics.csv&quot;
+lyrics.keys()
+songs = lyrics.get(&#39;songs&#39;)
+lyric_df = pd.DataFrame(columns=[&#39;name&#39;, &#39;lyrics&#39;])
+for x in songs:
+    lyric_df = lyric_df.append({
+        &#39;name&#39;: x.get(&#39;title&#39;),
+        &#39;lyrics&#39;: x.get(&#39;lyrics&#39;)
+    }, ignore_index=True)
+lyric_df.to_csv(lyric_path, index=False)
+lyric_df.iloc[0]</code></pre>
+<pre><code>## name                                               13 Miles
+## lyrics    13 miles down the road lives a young boy\nHe&#39;s...
+## Name: 0, dtype: object</code></pre>
+</div>
+<div id="offensive-profane-words" class="section level2">
+<h2>Offensive / Profane Words</h2>
+<p>Since I’m analyzing the effect lyrics have on the popularity of songs, I will want to display some of the lyrics. Considering that:</p>
+<ul>
+<li>Punk music came about because people thought contemporary <a href="https://en.wikipedia.org/wiki/Punk_rock#Philosophy">rock-and-roll wasn’t wild enough</a>,</li>
+<li>blink-182 wrote a number of “joke songs” where part of the joke is that they are shockingly profane, and</li>
+<li>The purpose of my blog is neither to offend nor to be unusually wild,</li>
+</ul>
+<p>I want to mask offensive words (something like <code>word</code>→<code>w***</code>) before displaying them.</p>
+<p>Luis von Ahn’s research group at Carnegie Mellon has generously <a href="https://www.cs.cmu.edu/~biglou/resources/">posted a list of offensive words</a> that I will be using to identify words in these lyrics that may be offensive.</p>
+<pre class="python"><code>from urllib.request import urlopen
+url = &quot;https://www.cs.cmu.edu/~biglou/resources/bad-words.txt&quot;
+curses = urlopen(url).read().decode(&#39;utf-8&#39;).strip().split(&quot;\n&quot;)
+curse_df = pd.DataFrame({&#39;word&#39;: curses})
+curse_path = &quot;~/Documents/datasets/bl182/curses.csv&quot;
+curse_df.to_csv(curse_path, index=False)</code></pre>
+</div>
+<div id="the-end" class="section level2">
+<h2>The end</h2>
+<p>Reading back through this post, I wish there were more pictures and fewer lines of code! But after all that API-calling and data-reformatting, we now have some good data to analyze and visualize next week. And in the process, I got to listen to some good music. No regrets!</p>
+</div>
+
+</div>
+            <div class="footer">
+                <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+<script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+
+
+        <h2>Comments</h2>
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+      (function () {
+            
+            
+            
+            if (location.hostname === "localhost" || 
+            	location.hostname === "127.0.0.1" || 
+            	location.hostname === "") {
+                return;
+			}
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            var disqus_shortname = 'jdaytn-blog';
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(
+                  dsq);
+      })();
+</script>
+
+<noscript>
+	Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
+            </div>
+        </div>
+        
+        
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-84872440-3', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+        
+    </body>
+</html>

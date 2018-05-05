@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Data Science, et al.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 30 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What makes some blink-182 songs more popular than others? Part 1</title>
+      <link>/posts/download-blink-182-data/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/download-blink-182-data/</guid>
+      <description>Justification (Background) For Christmas one year while I was in elementary school, my next-door neighbor got a GameCube from Santa Claus, and he gave me his old Nintendo 64 along with all his games. I was in heaven.
+I would play Tony Hawk Pro Skater 3 for hours and hours (until I got a C+ in my 6th grade English class and my mom took it away). I didn’t have a memory card, so I had to leave the game running overnight for several days in order to make it to the later levels of the game.</description>
+    </item>
     
     <item>
       <title>Summer Goals, starting a blog in an hour a day, and Iris</title>
